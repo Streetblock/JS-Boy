@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS-Boy Emulator</title>
+    <title data-i18n="pageTitle">JS-Boy Emulator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,11 +19,11 @@
                     <div class="screen-aspect">
                         <canvas id="gameboy-screen"></canvas>
                         <div id="screen-splash" class="screen-splash">
-                            <p class="screen-splash-title">JS-Boy Emulator</p>
-                            <p class="screen-splash-subtitle">Bitte ROM laden</p>
+                            <p class="screen-splash-title" data-i18n="pageTitle">JS-Boy Emulator</p>
+                            <p class="screen-splash-subtitle" data-i18n="splashSubtitle">Bitte ROM laden</p>
                         </div>
                     </div>
-                    <p class="text-center text-red-500 text-xs absolute left-1/2 -translate-x-1-2 bottom-5 font-mono">BATTERY</p>
+                    <p class="text-center text-red-500 text-xs absolute left-1/2 -translate-x-1-2 bottom-5 font-mono" data-i18n="battery">BATTERY</p>
                 </div>
 
                 <h1 class="text-2xl text-center font-bold text-blue-800" style="font-family: 'Press Start 2P', sans-serif;">JS-Boy</h1>
@@ -45,12 +45,12 @@
                 </div>
 
                 <div class="flex justify-center gap-6 system-buttons">
-                    <div id="btn-select" data-key="SELECT" class="button flex items-center justify-center">SELECT</div>
-                    <div id="btn-start" data-key="START" class="button flex items-center justify-center">START</div>
+                    <div id="btn-select" data-key="SELECT" class="button flex items-center justify-center" data-i18n="selectButton">SELECT</div>
+                    <div id="btn-start" data-key="START" class="button flex items-center justify-center" data-i18n="startButton">START</div>
                 </div>
 
                 <div class="pt-4 text-center">
-                    <label for="rom-input" class="cursor-pointer bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition">
+                    <label id="rom-input-label" for="rom-input" class="cursor-pointer bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition" data-i18n="loadRom">
                         ROM laden...
                     </label>
                     <input type="file" id="rom-input" class="hidden" accept=".gb,.gbc">
@@ -60,7 +60,7 @@
 
             <div class="debug-info debug-panel p-4 mt-4 rounded-lg">
                 <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-lg font-bold text-gray-400">CPU Status</h3>
+                    <h3 class="text-lg font-bold text-gray-400" data-i18n="cpuStatus">CPU Status</h3>
                     <button id="mute-btn" class="bg-gray-600 text-white p-2 rounded-full hover:bg-gray-500 transition focus:outline-none">
                         <svg id="speaker-icon-muted" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
                         <svg id="speaker-icon-unmuted" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
@@ -73,28 +73,38 @@
                     <span>BC: <span id="reg-bc">0000</span></span>
                     <span>DE: <span id="reg-de">0000</span></span>
                     <span>HL: <span id="reg-hl">0000</span></span>
-                    <span class="col-span-2">Flags (ZNHC): <span id="flags">----</span></span>
+                    <span class="col-span-2"><span data-i18n="flagsLabel">Flags (ZNHC):</span> <span id="flags">----</span></span>
                 </div>
             </div>
         </div>
 
         <div class="info-box-container">
             <div class="info-box bg-gray-700 text-gray-300">
-                <h3 class="text-base font-bold text-gray-400 mb-3 text-center" style="font-family: 'Press Start 2P', sans-serif;">Speicherverwaltung</h3>
+                <div class="flex items-center justify-between gap-3">
+                    <label for="language-select" class="text-xs font-bold uppercase tracking-wide" data-i18n="languageLabel">Sprache</label>
+                    <select id="language-select" class="language-select">
+                        <option value="de">Deutsch</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="info-box bg-gray-700 text-gray-300">
+                <h3 class="text-base font-bold text-gray-400 mb-3 text-center" style="font-family: 'Press Start 2P', sans-serif;" data-i18n="storageTitle">Speicherverwaltung</h3>
                 <div class="grid grid-cols-2 gap-2">
-                    <label for="import-save-input" id="import-save-btn" class="info-button">Save importieren (.sav)</label>
+                    <label for="import-save-input" id="import-save-btn" class="info-button" data-i18n="importSave">Save importieren (.sav)</label>
                     <input type="file" id="import-save-input" class="hidden" accept=".sav">
-                    <button id="export-save-btn" class="info-button">Save exportieren (.sav)</button>
+                    <button id="export-save-btn" class="info-button" data-i18n="exportSave">Save exportieren (.sav)</button>
                 </div>
                 <p id="save-status" class="text-xs text-center mt-3 h-4 text-green-400"></p>
             </div>
 
             <div class="info-box bg-gray-700 text-gray-300 text-xs">
-                <h3 class="text-base font-bold text-gray-400 mb-2 text-center" style="font-family: 'Press Start 2P', sans-serif;">Steuerung</h3>
+                <h3 class="text-base font-bold text-gray-400 mb-2 text-center" style="font-family: 'Press Start 2P', sans-serif;" data-i18n="controlsTitle">Steuerung</h3>
                 <div class="grid grid-cols-2 gap-x-4">
-                    <div><p class="font-bold">Steuerkreuz:</p><p>&uarr; &darr; &larr; &rarr; / WASD</p></div>
-                    <div><p class="font-bold"><p>A: (Z/Y/J) / B: (X/K)</p></div>
-                    <div class="col-span-2 mt-2"><p><span class="font-bold">START:</span> Enter</p><p><span class="font-bold">SELECT:</span> R-Shift</p></div>
+                    <div><p class="font-bold" data-i18n="dpadLabel">Steuerkreuz:</p><p data-i18n="dpadKeys">&uarr; &darr; &larr; &rarr; / WASD</p></div>
+                    <div><p class="font-bold"><p data-i18n="abKeys">A: (Z/Y/J) / B: (X/K)</p></div>
+                    <div class="col-span-2 mt-2"><p><span class="font-bold" data-i18n="startLabel">START:</span> <span data-i18n="startKey">Enter</span></p><p><span class="font-bold" data-i18n="selectLabel">SELECT:</span> <span data-i18n="selectKey">R-Shift</span></p></div>
                 </div>
             </div>
         </div>
