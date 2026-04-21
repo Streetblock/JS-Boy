@@ -4,6 +4,8 @@ Lies mich auf Deutsch: [README_de.md](./README_de.md)
 
 JS-Boy is a browser-based Game Boy emulator UI with a custom JavaScript emulator core.
 
+This branch is `feat/cgb-core`, the experimental Game Boy Color work branch. The stable branch for the GitHub Pages version remains `main`.
+
 The project started as a single HTML file and was later split into a cleaner GitHub-friendly structure:
 
 - `index.html` for markup
@@ -82,6 +84,12 @@ Recent improvements include:
 - `LY` reset behavior on `FF44` writes
 - OAM blocking during DMA
 - VRAM / OAM access restrictions based on PPU mode
+- CGB hardware mode scaffolding
+- CGB VRAM / WRAM banking
+- CGB BG / OBJ palette registers
+- initial CGB palette rendering for background and sprites
+- CGB window line tracking
+- pragmatic HDMA simplification for better stability in affected games
 
 ## Known Limitations
 
@@ -91,8 +99,9 @@ Known gaps and risks include:
 
 - compatibility is still incomplete across commercial ROMs
 - PPU and DMA timing are improved, but still simplified
+- CGB support is experimental and still inaccurate in several hardware details
+- HDMA currently favors stability over hardware accuracy
 - MBC3 RTC support is basic, not fully hardware-accurate
-- Color Game Boy support is still missing
 - some cartridge types are still unsupported
 - audio emulation is functional but not hardware-accurate
 
