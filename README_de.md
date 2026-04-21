@@ -4,6 +4,10 @@ Read me in English: [README.md](./README.md)
 
 JS-Boy ist eine browserbasierte Game-Boy-Oberflaeche mit einem eigenen Emulator-Kern in JavaScript.
 
+Der Branch `main` ist der stabile Branch und dient als Grundlage fuer die GitHub-Pages-Deployment-Version des Projekts.
+
+Ein experimenteller Game-Boy-Color-Branch ist unter `feat/cgb-core` verfuegbar. Dort laeuft die laufende CGB-Arbeit, entsprechend kann der Stand instabiler sein als auf `main`.
+
 Das Projekt begann als einzelne HTML-Datei und wurde spaeter in eine sauberere, GitHub-taugliche Struktur aufgeteilt:
 
 - `index.html` fuer das Markup

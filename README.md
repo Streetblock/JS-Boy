@@ -4,6 +4,10 @@ Lies mich auf Deutsch: [README_de.md](./README_de.md)
 
 JS-Boy is a browser-based Game Boy emulator UI with a custom JavaScript emulator core.
 
+The `main` branch is the stable branch and is intended to back the GitHub Pages deployment of the project.
+
+An experimental Game Boy Color branch is available at `feat/cgb-core`. That branch contains ongoing CGB work and may be more unstable than `main`.
+
 The project started as a single HTML file and was later split into a cleaner GitHub-friendly structure:
 
 - `index.html` for markup
