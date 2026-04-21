@@ -36,6 +36,8 @@ const TRANSLATIONS = {
         saveStored: 'Spielstand gespeichert.',
         saveLoaded: 'Spielstand gefunden & geladen.',
         saveLoadError: 'Ladefehler!',
+        saveUnsupported: 'Diese ROM unterstützt kein Save-RAM.',
+        saveTooLarge: 'Save-Datei ist größer als der Cartridge-RAM.',
     },
     en: {
         pageTitle: 'JS-Boy Emulator',
@@ -67,6 +69,8 @@ const TRANSLATIONS = {
         saveStored: 'Save stored.',
         saveLoaded: 'Save found & loaded.',
         saveLoadError: 'Load error!',
+        saveUnsupported: 'This ROM does not support save RAM.',
+        saveTooLarge: 'Save file is larger than the cartridge RAM.',
     },
 };
 
@@ -78,6 +82,8 @@ const STATUS_MESSAGE_ALIASES = {
     'Zuerst ROM laden!': 'loadRomFirst',
     'Save exportiert!': 'saveExported',
     'Save importiert & gespeichert!': 'saveImported',
+    'Diese ROM unterstützt kein Save-RAM.': 'saveUnsupported',
+    'Save-Datei ist größer als der Cartridge-RAM.': 'saveTooLarge',
 };
 
 let gameboyInstance = null;
@@ -162,6 +168,14 @@ function getLoadedRomName(romTitle) {
     return romTitle.textContent.replace(prefix, '').replace(/^:\s*/, '').trim();
 }
 
+function getSaveRamTarget() {
+    const mbc = gameboyInstance?.mmu?.mbc;
+    if (!mbc || !(mbc.ram instanceof Uint8Array) || typeof mbc.requestSave !== 'function') {
+        return null;
+    }
+    return mbc;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const screen = document.getElementById('gameboy-screen');
     const screenSplash = document.getElementById('screen-splash');
@@ -227,7 +241,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const ramData = gameboyInstance.mmu.mbc.ram;
+        const saveTarget = getSaveRamTarget();
+        if (!saveTarget) {
+            setSaveStatus('Diese ROM unterstützt kein Save-RAM.', 2000);
+            return;
+        }
+
+        const ramData = saveTarget.ram;
         const blob = new Blob([ramData], { type: 'application/octet-stream' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -248,6 +268,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const saveTarget = getSaveRamTarget();
+        if (!saveTarget) {
+            setSaveStatus('Diese ROM unterstützt kein Save-RAM.', 2000);
+            importInput.value = '';
+            return;
+        }
+
         const file = event.target.files[0];
         if (!file) {
             return;
@@ -256,8 +283,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const reader = new FileReader();
         reader.onload = (loadEvent) => {
             const importedRam = new Uint8Array(loadEvent.target.result);
-            gameboyInstance.mmu.mbc.ram.set(importedRam);
-            gameboyInstance.mmu.mbc.requestSave();
+            if (importedRam.length > saveTarget.ram.length) {
+                setSaveStatus('Save-Datei ist größer als der Cartridge-RAM.', 2000);
+                return;
+            }
+
+            saveTarget.ram.fill(0);
+            saveTarget.ram.set(importedRam);
+            saveTarget.requestSave();
             setSaveStatus('Save importiert & gespeichert!', 2000);
         };
         reader.readAsArrayBuffer(file);
